@@ -2,18 +2,14 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import styled from 'styled-components';
-import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
-import { time } from './Store';
-
-
+import { time, modal } from './Store';
+import SetTimeModal from './SetTimeModal';
 
 function Index({store, setTime}) {
   const [startBtnSize, setStartBtnSize] = useState(1);
   const [startBtnColor, setStartBtnColor] = useState("#a6e3e9");
   const [startModal, setStartModal] = useState(false);
-  
-  let date = new Date().getDate();
 
   function StartTimeOnPressIn(){
     setStartBtnSize(0.98);
@@ -36,52 +32,22 @@ function Index({store, setTime}) {
       <SetViewBox>
         <TimeButtonBox size= {startBtnSize} onPressIn= {StartTimeOnPressIn} onPressOut= {StartTimeOnPressOut}>
           <TimeButton size= {startBtnSize} bgcolor={startBtnColor}>
-            <Text>{date}</Text>
+            <Text>{store.date}</Text>
           </TimeButton>
         </TimeButtonBox>
         <TimeButtonBox size= {startBtnSize} onPressIn= {StartTimeOnPressIn} onPressOut= {StartTimeOnPressOut}>
           <TimeButton size= {startBtnSize} bgcolor={startBtnColor}>
-            <Text>{store.time}</Text>
+            <Text>{store.date}</Text>
           </TimeButton>
         </TimeButtonBox>
       </SetViewBox>
       {startModal ? (
-        <SetTimeModal displayModal = {startModal}>
-        <LinearGradient
-            colors={['rgba(255,255,255,0.8)', 'transparent']}
-            style={styles.topGradient}
-          />
-        <LinearGradient
-          colors={['transparent', 'rgba(255,255,255,0.8)']}
-          style={styles.bottomGradient}
-        />
-        <TimeButtonBox size= {startBtnSize} onPressIn= {StartTimeOnPressIn} onPressOut= {DisplayModal}>
-          <TimeButton size= {startBtnSize} bgcolor={startBtnColor}>
-            <Text>출발시간</Text>
-          </TimeButton>
-        </TimeButtonBox>
-      </SetTimeModal>
+        <SetTimeModal></SetTimeModal>
       ):(<></>)}
       
     </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  topGradient: {
-    width: "100%",
-    height: "40%",
-    position: "absolute",
-    top: 0,
-  },
-
-  bottomGradient: {
-    width: "100%",
-    height: "40%",
-    position: "absolute",
-    bottom: 0,
-  }
-});
 
 const Container = styled.SafeAreaView`
   background: #e3e3e3;
@@ -113,22 +79,14 @@ const TimeButton = styled.View`
   transform: scale(${(props) => props.size || 1});
 `;
 
-const SetTimeModal = styled.View`
-  width: 90%;
-  height: 80%;
-  position: absolute;
-  background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-`;
-
 function mapStateToProps(state){
   return {store: state};
 }
 
 function mapDispatchToProps(dispatch){
   return{
-    setTime: () => dispatch(time())
+    setTime: () => dispatch(time()),
+    toggleModal: (boolModal) => dispatch(modal(boolModal))
   };
 }
 
