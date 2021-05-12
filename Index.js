@@ -1,29 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { time, modal } from './Store';
+import { time, toggleModal } from './Store';
 import SetTimeModal from './SetTimeModal';
 
-function Index({store, setTime}) {
+
+
+function Index({store, setTime, toggleModal}) {
   const [startBtnSize, setStartBtnSize] = useState(1);
   const [startBtnColor, setStartBtnColor] = useState("#a6e3e9");
-  const [startModal, setStartModal] = useState(false);
+  const [utoggleModal, setToggleModal] = useState(false);
 
   function StartTimeOnPressIn(){
     setStartBtnSize(0.98);
     setStartBtnColor("#71c9ce");
-    setStartModal(true);
+    toggleModal(true);
   }
 
   function StartTimeOnPressOut(){
     setStartBtnSize(1);
     setStartBtnColor("#a6e3e9");
-  }
-
-  function DisplayModal(){
-    setStartModal(false);
   }
 
   return (
@@ -37,14 +35,11 @@ function Index({store, setTime}) {
         </TimeButtonBox>
         <TimeButtonBox size= {startBtnSize} onPressIn= {StartTimeOnPressIn} onPressOut= {StartTimeOnPressOut}>
           <TimeButton size= {startBtnSize} bgcolor={startBtnColor}>
-            <Text>{store.date}</Text>
+            <Text>{store.minute}</Text>
           </TimeButton>
         </TimeButtonBox>
       </SetViewBox>
-      {startModal ? (
-        <SetTimeModal></SetTimeModal>
-      ):(<></>)}
-      
+      {store.displayModal && <SetTimeModal/>}
     </Container>
   );
 }
@@ -85,8 +80,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return{
-    setTime: () => dispatch(time()),
-    toggleModal: (boolModal) => dispatch(modal(boolModal))
+    setTime: (hour, minute) => dispatch(time({hour, minute})),
+    toggleModal: (boolModal) => dispatch(toggleModal(boolModal))
   };
 }
 
