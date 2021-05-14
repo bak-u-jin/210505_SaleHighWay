@@ -1,30 +1,85 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 
+let now = new Date();
+
 const store = createSlice({
   name: "storeReducer",
   initialState: {
-    date: new Date().getHours(),
-    minute: new Date().getMinutes(),
-    displayModal: false
+    startBtnSize: 1,
+    endBtnSize: 1,
+    resultBtnSize: 1,
+    startBtnColor: "#a6e3e9",
+    endBtnColor: "#a6e3e9",
+    resultBtnColor: "#0061a8 ",
+    switchStartEnd : "start",
+    displayTimeModal: false,
+    startHour: now.getHours(),
+    startMinute: now.getMinutes(),
+    // endHour: now.getHours()+1,
+    // endMinute: now.getMinutes(),
   },
   reducers: {
-    time: (state, action) =>{
-      return {
+    setStartBtn: (state, action)=>{
+      return{
         ...state,
-        date: action.payload.hour,
-        minute: action.payload.minute,
-        displayModal: false,
+        startBtnSize: action.payload.size,
+        startBtnColor: action.payload.color,
       }
     },
     
-    toggleModal: (state, action) =>{
+    setEndBtn: (state, action)=>{
+      return{
+        ...state,
+        endBtnSize: action.payload.size,
+        endBtnColor: action.payload.color,
+      }
+    },
+
+    setResultBtn: (state, action)=>{
+      return{
+        ...state,
+        resultBtnSize: action.payload.size,
+        resultBtnColor: action.payload.color,
+      }
+    },
+    
+    toggleTimeModal: (state, action) =>{
+      return {
+        ...state,
+        switchStartEnd: action.payload,
+        displayTimeModal: true,
+      }
+    },
+
+    setStartTime: (state, action) =>{
+      if(state.endHour === now.getHours()+1)
         return {
           ...state,
-          displayModal: action.payload
+          startHour: action.payload.hour,
+          startMinute: action.payload.minute,
+          endHour: action.payload.hour+1,
+          endMinute: action.payload.minute,
+          displayTimeModal: false,  
+        }
+      else
+        return {
+          ...state,
+          startHour: action.payload.hour,
+          startMinute: action.payload.minute,
+          displayTimeModal: false,  
+        }
+    },
+
+    setEndTime: (state, action) =>{
+      return {
+        ...state,
+        endHour: action.payload.hour,
+        endMinute: action.payload.minute,
+        displayTimeModal: false,
       }
     },
   }
 });
 
-export const {time, toggleModal} = store.actions;
+export const {setStartBtn, setEndBtn, setResultBtn, toggleTimeModal, setStartTime, setEndTime} = store.actions;
 export default configureStore({reducer: store.reducer});

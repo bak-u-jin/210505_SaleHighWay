@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { LinearGradient } from 'expo-linear-gradient';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import React from 'react';
 import { connect } from 'react-redux';
-import { time, toggleModal } from './Store';
+import { setStartTime, setEndTime } from './Store';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-function SetTimeModal({store, setTime, toggleModal}){
+function SetTimeModal({store, setStartTime, setEndTime}){
   const date =new Date();
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setTime(currentDate.getHours(), currentDate.getMinutes());
+    if(store.switchStartEnd === "start")
+      setStartTime(currentDate.getHours(), currentDate.getMinutes());
+    else{
+      console.log(store.switchStartEnd);
+      setEndTime(currentDate.getHours(), currentDate.getMinutes());}
   };
 
   return(
@@ -42,8 +43,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return{
-    setTime: (hour, minute) => dispatch(time({hour, minute})),
-    toggleModal: (boolModal) => dispatch(toggleModal(boolModal))
+    setStartTime: (hour, minute) => dispatch(setStartTime({hour, minute})),
+    setEndTime : (hour, minute) => dispatch(setEndTime({hour, minute})),
   };
 }
 
