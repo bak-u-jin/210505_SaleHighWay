@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { setStartBtn, setEndBtn, setResultBtn, toggleTimeModal} from './Store';
-import SetTimeModal from './SetTimeModal';
+import { setStartBtn, setEndBtn, setResultBtn, toggleTimeModal} from '../Store';
+import SetTimeModal from '../SetTimeModal';
 
-function Home({store, StartBtnPress, EndBtnPress, ResultBtnPress, ToggleTimeModal}) {
+function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, ToggleTimeModal}) {
   const statusBarColor = "#e3e3e3";
   const resultBtnBgColor = "#2978b5";
   const resultBtnPressBgColor = "#0061a8";
@@ -31,6 +31,7 @@ function Home({store, StartBtnPress, EndBtnPress, ResultBtnPress, ToggleTimeModa
 
   function resultOnPressIn(){
     ResultBtnPress(0.98, resultBtnPressBgColor);
+    navigation.navigate('Result');
   }
 
   function resultOnPressOut(){
@@ -59,7 +60,7 @@ function Home({store, StartBtnPress, EndBtnPress, ResultBtnPress, ToggleTimeModa
                 <Text>도착시간 오후 {store.endHour-12}시 {store.endMinute}분</Text>
               )
             ):(
-              <Text>예아</Text>
+              <Text>도착시간을 정해주세요</Text>
             )}  
           </TimeButton>
         </TimeButtonBox>
@@ -70,9 +71,9 @@ function Home({store, StartBtnPress, EndBtnPress, ResultBtnPress, ToggleTimeModa
               </ResultButton>
             </ResultButtonBox>
           ):(
-            <ResultButton>
-              <Text>시간을 설정해주세요</Text>
-            </ResultButton>
+              <ResultButton>
+                <Text>시간을 설정해주세요</Text>
+              </ResultButton>
           )}
       </SetViewBox>
       {console.log("Aa")} 
@@ -105,6 +106,7 @@ const ResultButtonBox = styled.TouchableWithoutFeedback`
 `;
 
 const TimeButton = styled.View`
+  
   margin:5px 0;
   width: 90%;
   height:40px;
@@ -116,7 +118,7 @@ const TimeButton = styled.View`
 `;
 
 const ResultButton = styled.View`
-  margin:5px 0;
+  margin: 40px 0 20px 0;
   width: 90%;
   height:40px;
   border-radius:10px;
