@@ -15,6 +15,7 @@ const store = createSlice({
     displayTimeModal: false,
     startHour: now.getHours(),
     startMinute: now.getMinutes(),
+    salePercent: false,
     // endHour: now.getHours()+1,
     // endMinute: now.getMinutes(),
   },
@@ -78,8 +79,23 @@ const store = createSlice({
         displayTimeModal: false,
       }
     },
+
+    setSalePercent: (state, action) =>{
+      console.log(action);
+      return{
+        ...state,
+        salePercent: `${action.payload}%`
+      }
+    }
   }
 });
 
-export const {setStartBtn, setEndBtn, setResultBtn, toggleTimeModal, setStartTime, setEndTime} = store.actions;
+export const {
+  setStartBtn,
+  setEndBtn,
+  setResultBtn,
+  toggleTimeModal,
+  setStartTime,
+  setEndTime,
+  setSalePercent} = store.actions;
 export default configureStore({reducer: store.reducer});

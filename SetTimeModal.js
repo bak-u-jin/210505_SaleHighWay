@@ -1,19 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setStartTime, setEndTime } from './Store';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-function SetTimeModal({store, setStartTime, setEndTime}){
+function SetTimeModal({navigation, store, setStartTime, setEndTime}){
   const date =new Date();
+  console.log("aa");
+  useEffect(()=>{
+  },[]);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     if(store.switchStartEnd === "start")
       setStartTime(currentDate.getHours(), currentDate.getMinutes());
-    else{
-      console.log(store.switchStartEnd);
-      setEndTime(currentDate.getHours(), currentDate.getMinutes());}
+    else
+      setEndTime(currentDate.getHours(), currentDate.getMinutes());
+
+    console.log("aaaaa");
+
   };
 
   return(

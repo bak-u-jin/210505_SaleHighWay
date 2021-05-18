@@ -76,7 +76,7 @@ function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, To
               </ResultButton>
           )}
       </SetViewBox>
-      {console.log("Aa")} 
+      {/* {console.log("Aa")}  */}
       {/* console 넣지 않음 피커가 2번뜸 */}
       {store.displayTimeModal && <SetTimeModal/>}
     </Container>

@@ -1,26 +1,108 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { StyleSheet, Text, View } from 'react-native';
+import { connect } from 'react-redux';
+import { setSalePercent } from '../Store';
+import { FontAwesome5 } from '@expo/vector-icons';
 
-function Result(){
+function Result({navigation, store, SetSalePercent}){
+  let startTime = store.startHour * 60 + store.startMinute;
+  let endTime = store.endHour * 60 + store.endMinute;
+  let fullTime = endTime - startTime;
+  let saleTime = false;
+  let salePercent = false;
+
+  function CalcTime(){
+    console.log("firstTime", store.startHour, store.endHour, fullTime);
+    if(fullTime < 0)
+      EndSmallThanStart();
+    console.log("hour",startTime, endTime, fullTime);
+
+    if(startTime > 360 && startTime < 1260 && endTime > 360 && endTime < 1260)
+      saleTime = 0;
+    else{
+      if(startTime > 360 && startTime < 1260)
+        SetStartToSale();
+      if(endTime > 360 && endTime < 1260)
+        endTime = 360;
+      else if(endTime > 1800 && endTime < 2700)
+        endTime = 1800;
+      console.log("calc",startTime, endTime, fullTime);
+      ClacSaleTime();
+    }
+    CalcSalePercent();
+    console.log("sale",salePercent,"% ", fullTime, saleTime);
+  }
+
+  function CalcSalePercent(){
+    salePercent = saleTime / fullTime * 100;
+    salePercent = Math.floor(salePercent);
+    SetSalePercent(salePercent);
+  }
+  
+  function ClacSaleTime(){
+    if(startTime > endTime)
+      endTime += 1440;
+    saleTime = endTime - startTime;
+  }
+
+  function EndSmallThanStart(){
+    endTime += 1440;
+    fullTime = endTime - startTime;
+  }
+
+  function SetStartToSale(){
+    startTime = 1260;
+  }
+
+  useEffect(() => {CalcTime()},[]);
+
+  function OnPressIn(){
+    navigation.navigate('Home');
+  }
 
   return(
     <Container>
       <ResultViewBox>
+        <BackArrowBox onPressIn={OnPressIn}>
+          <FontAwesome5 name="angle-double-left" size={20} color="black" style={styles.arrow}/>
+        </BackArrowBox>
+        <ResultText>50% 세일</ResultText>
         <GageBar>
-          <Gage>
-          </Gage>
+          <GagePartBox>
+            <GagePart bgColor="#be0000" flex={2}></GagePart>
+            <GagePart bgColor="#f7ea00" flex={5}></GagePart>
+            <GagePart bgColor="#9ede73" flex={3}></GagePart>
+          </GagePartBox>
+          <Gage width={store.salePercent}/>
             <GageFloat/>
         </GageBar>
         <GageSectionBox>
-          <GageSection></GageSection>
-          <GageSection></GageSection>
-          <GageSection></GageSection>
+          <GageSection flex={2}>
+            <Text>0%~19%</Text>
+            <SaleText>0%</SaleText>
+          </GageSection>
+          <GageSection flex={5}>
+            <Text>20%~69%</Text>
+            <SaleText>30%</SaleText>
+          </GageSection>
+          <GageSection flex={3}>
+            <Text>70%~100%</Text>
+            <SaleText>50%</SaleText>
+          </GageSection>
         </GageSectionBox>
       </ResultViewBox>
     </Container>
   );
 }
+
+const styles = StyleSheet.create({
+  arrow: {
+    position: 'absolute',
+    left: 20,
+    top: 20
+  }
+})
 
 const Container = styled.SafeAreaView`
   background: #e3e3e3;
@@ -39,6 +121,16 @@ const ResultViewBox = styled.View`
   align-items: center;
 `;
 
+const BackArrowBox = styled.TouchableWithoutFeedback`
+
+`;
+
+const ResultText = styled.Text`
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 20px;
+`;
+
 const GageBar = styled.View`
   width: 100%;
   height: 10px;
@@ -51,8 +143,22 @@ const GageBar = styled.View`
   overflow: hidden;
 `;
 
+const GagePartBox = styled.View`
+  width: 100%;
+  height: 100%;
+  flex-direction: row;
+  position: absolute;
+`;
+
+const GagePart = styled.View`
+  flex: ${(props) => props.flex || 2};
+  height: 100%;
+  background: ${(props) => props.bgColor || "#eee"};
+  align-items: flex-end;
+`;
+
 const Gage = styled.View`
-  width: 80%;
+  width: ${(props) => props.width || "0%"};
   height: 100%;
   background: #3490de;
   align-items: flex-end;
@@ -70,17 +176,34 @@ const GageSectionBox = styled.View`
   width:100%;
   height:20%;
   margin: 10px 0;
-  background:#eee;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
 
 const GageSection = styled.View`
-  width:30%;
+  flex: ${(props) => props.flex || 2};
   height: 100%;
-  background: #aaa;
+  margin: 0 2px;
+  border-radius: 10px;
+  background: #ddd;
+  align-items: center;
+`;
+
+const SaleText = styled.Text`
+  font-size: 22px;
+  font-weight: bold;
 `;
 
 
-export default Result;
+function mapStateToProps(state){
+  return {store: state};
+}
+
+function mapDispatchToProps(dispatch){
+  return{
+    SetSalePercent: (salePercent) => dispatch(setSalePercent(salePercent)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (Result);
