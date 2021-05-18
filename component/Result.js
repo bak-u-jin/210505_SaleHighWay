@@ -1,22 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { StyleSheet, Text, View } from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import { setSalePercent } from '../Store';
+import { setSaleResultPercent, setSaleTimePercent } from '../Store';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { Easing } from 'react-native-reanimated';
 
-function Result({navigation, store, SetSalePercent}){
+function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
   let startTime = store.startHour * 60 + store.startMinute;
   let endTime = store.endHour * 60 + store.endMinute;
   let fullTime = endTime - startTime;
   let saleTime = false;
-  let salePercent = false;
+  let saleTimePercent = false;
 
   function CalcTime(){
-    console.log("firstTime", store.startHour, store.endHour, fullTime);
     if(fullTime < 0)
       EndSmallThanStart();
-    console.log("hour",startTime, endTime, fullTime);
 
     if(startTime > 360 && startTime < 1260 && endTime > 360 && endTime < 1260)
       saleTime = 0;
@@ -30,14 +29,24 @@ function Result({navigation, store, SetSalePercent}){
       console.log("calc",startTime, endTime, fullTime);
       ClacSaleTime();
     }
-    CalcSalePercent();
-    console.log("sale",salePercent,"% ", fullTime, saleTime);
+    CalcSaleTimePercent();
+    console.log("sale",saleTimePercent,"% ", fullTime, saleTime);
+    SetSaleResult();
   }
 
-  function CalcSalePercent(){
-    salePercent = saleTime / fullTime * 100;
-    salePercent = Math.floor(salePercent);
-    SetSalePercent(salePercent);
+  function SetSaleResult(){
+    if(saleTimePercent >= 70)
+      SetSaleResultPercent(50);
+    else if(saleTimePercent >= 20)
+      SetSaleResultPercent(30);
+    else
+      SetSaleResultPercent(0);
+  }
+
+  function CalcSaleTimePercent(){
+    saleTimePercent = saleTime / fullTime * 100;
+    saleTimePercent = Math.floor(saleTimePercent);
+    SetSaleTimePercent(saleTimePercent);
   }
   
   function ClacSaleTime(){
@@ -61,20 +70,39 @@ function Result({navigation, store, SetSalePercent}){
     navigation.navigate('Home');
   }
 
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  Animated.timing(
+      fadeAnim,
+      {
+        toValue: store.saleTimePercent,
+        duration: 1000,
+        easing: Easing.linear
+      }
+    ).start();
+  
+  // {
+  //   // Will change fadeAnim value to 1 in 5 seconds
+  //   Animated.timing(fadeAnim, {
+  //     toValue: 1,
+  //     duration: 5000,
+  //   }).start();
+  // };
+
   return(
     <Container>
       <ResultViewBox>
         <BackArrowBox onPressIn={OnPressIn}>
           <FontAwesome5 name="angle-double-left" size={20} color="black" style={styles.arrow}/>
         </BackArrowBox>
-        <ResultText>50% 세일</ResultText>
+        <ResultText>{store.saleResultPercent}% 세일</ResultText>
         <GageBar>
           <GagePartBox>
             <GagePart bgColor="#be0000" flex={2}></GagePart>
             <GagePart bgColor="#f7ea00" flex={5}></GagePart>
             <GagePart bgColor="#9ede73" flex={3}></GagePart>
           </GagePartBox>
-          <Gage width={store.salePercent}/>
+          <Animated.View style={[styles.gage, {width: fadeAnim}]}/>
             <GageFloat/>
         </GageBar>
         <GageSectionBox>
@@ -101,6 +129,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 20,
     top: 20
+  },
+  gage: {
+    height: '100%',
+    backgroundColor: '#3490de',
+    alignItems: 'flex-end',
   }
 })
 
@@ -158,10 +191,7 @@ const GagePart = styled.View`
 `;
 
 const Gage = styled.View`
-  width: ${(props) => props.width || "0%"};
-  height: 100%;
-  background: #3490de;
-  align-items: flex-end;
+  
 `;
 
 const GageFloat = styled.View`
@@ -202,7 +232,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return{
-    SetSalePercent: (salePercent) => dispatch(setSalePercent(salePercent)),
+    SetSaleTimePercent: (saleTimePercent) => dispatch(setSaleTimePercent(saleTimePercent)),
+    SetSaleResultPercent: (saleResultPercent) => dispatch(setSaleResultPercent(saleResultPercent)),
   };
 }
 
