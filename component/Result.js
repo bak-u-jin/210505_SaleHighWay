@@ -75,7 +75,7 @@ function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
   Animated.timing(
       fadeAnim,
       {
-        toValue: store.saleTimePercent,
+        toValue: 100,
         duration: 1000,
         easing: Easing.linear
       }
@@ -102,7 +102,10 @@ function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
             <GagePart bgColor="#f7ea00" flex={5}></GagePart>
             <GagePart bgColor="#9ede73" flex={3}></GagePart>
           </GagePartBox>
-          <Animated.View style={[styles.gage, {width: fadeAnim}]}/>
+          <Animated.View style={[styles.gage, {width: fadeAnim.interpolate({
+            inputRange: [0,100],
+            outputRange: [`0%`, `${store.saleTimePercent}%`],
+          })}]}/>
             <GageFloat/>
         </GageBar>
         <GageSectionBox>
