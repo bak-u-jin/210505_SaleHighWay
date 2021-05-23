@@ -8,8 +8,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from './component/Home';
 import SetTimeModal from './SetTimeModal';
 import Result from './component/Result';
+import { Text } from 'react-native';
 
 const Stack = createStackNavigator();
+Text.defaultProps = Text.defaultProps || {};
+Text.defaultProps.allowFontScaling = false;
 
 export default function App() {
 

@@ -70,24 +70,17 @@ function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
     navigation.navigate('Home');
   }
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const resultAnim = useRef(new Animated.Value(0)).current;
 
   Animated.timing(
-      fadeAnim,
+    resultAnim,
       {
         toValue: 100,
         duration: 1000,
-        easing: Easing.linear
+        easing: Easing.linear,
+        useNativeDriver: true,
       }
     ).start();
-  
-  // {
-  //   // Will change fadeAnim value to 1 in 5 seconds
-  //   Animated.timing(fadeAnim, {
-  //     toValue: 1,
-  //     duration: 5000,
-  //   }).start();
-  // };
 
   return(
     <Container>
@@ -95,6 +88,7 @@ function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
         <BackArrowBox onPressIn={OnPressIn}>
           <FontAwesome5 name="angle-double-left" size={20} color="black" style={styles.arrow}/>
         </BackArrowBox>
+
         <ResultText>{store.saleResultPercent}% 세일</ResultText>
         <GageBar>
           <GagePartBox>
@@ -102,7 +96,7 @@ function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
             <GagePart bgColor="#f7ea00" flex={5}></GagePart>
             <GagePart bgColor="#9ede73" flex={3}></GagePart>
           </GagePartBox>
-          <Animated.View style={[styles.gage, {width: fadeAnim.interpolate({
+          <Animated.View style={[styles.gage, {width: resultAnim.interpolate({
             inputRange: [0,100],
             outputRange: [`0%`, `${store.saleTimePercent}%`],
           })}]}/>
@@ -158,7 +152,6 @@ const ResultViewBox = styled.View`
 `;
 
 const BackArrowBox = styled.TouchableWithoutFeedback`
-
 `;
 
 const ResultText = styled.Text`

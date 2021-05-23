@@ -73,6 +73,7 @@ const store = createSlice({
     },
 
     setEndTime: (state, action) =>{
+      console.log(action);
       return {
         ...state,
         endHour: action.payload.hour,
