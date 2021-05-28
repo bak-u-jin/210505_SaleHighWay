@@ -1,36 +1,41 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useRef } from 'react';
-import { Animated, StyleSheet } from 'react-native';
+import { Animated } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { setStartBtn, setEndBtn, setResultBtn, toggleTimeModal} from '../Store';
+import HelpButton from './HelpButton.js';
 import SetTimeModal from '../SetTimeModal';
 import StartTimeText from './StartTimeText';
-import EndTimeButton from './EndTimeButton';
 import EndTimeText from './EndTimeText';
+import HelpModal from './HelpModal';
+import EndTimeWarningModal from './EndTimeWarningModal';
 import { Easing } from 'react-native-reanimated';
 
 function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, ToggleTimeModal}) {
   const statusBarColor = "#e3e3e3";
+
+  const timeBtnColor = "#71c9ce";
+  const timeBtnPressColor = "#a6e3e9";
   const resultBtnBgColor = "#2978b5";
   const resultBtnPressBgColor = "#0061a8";
 
   function StartTimeOnPressIn(){
-    StartBtnPress(0.98, "#71c9ce");
+    StartBtnPress(0.98, timeBtnColor);
     ToggleTimeModal("start");
   }
   
   function StartTimeOnPressOut(){
-    StartBtnPress(1, "#a6e3e9");
+    StartBtnPress(1, timeBtnPressColor);
   }
   
   function EndTimeOnPressIn(){
-    EndBtnPress(0.98, "#71c9ce");
+    EndBtnPress(0.98, timeBtnColor);
     ToggleTimeModal("end");
   }
   
   function EndTimeOnPressOut(){
-    EndBtnPress(1, "#a6e3e9");
+    EndBtnPress(1, timeBtnPressColor);
   }
 
   function resultOnPressIn(){
@@ -44,29 +49,11 @@ function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, To
 
   const resultAnim = useRef(new Animated.Value(0)).current;
 
-  Animated.loop(
-    Animated.timing(
-      resultAnim,
-        {
-          toValue: 1,
-          duration: 1000,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        }
-    )
-  ).start();
-
   return (
     <Container>
       <StatusBar backgroundColor= {statusBarColor}/>
       <SetViewBox>
-        <Animated.View
-          style={[
-            styles.fadingContainer,
-            {
-              opacity: resultAnim, // Bind opacity to animated value
-            },
-          ]}/>
+        <HelpButton/>
         <TimeButtonBox onPressIn= {StartTimeOnPressIn} onPressOut= {StartTimeOnPressOut}>
           <TimeButton size= {store.startBtnSize} bgColor={store.startBtnColor}>
             <StartTimeText/>
@@ -75,10 +62,10 @@ function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, To
         <TimeButtonBox onPressIn= {EndTimeOnPressIn} onPressOut= {EndTimeOnPressOut}>
           <TimeButton size= {store.endBtnSize} bgColor={store.endBtnColor}>
             <EndTimeText/>
-            <EndTimeButton/>
           </TimeButton>
         </TimeButtonBox>
-          {store.endHour === undefined ? (
+        <EndTimeWarningModal/>
+          { (store.startHour === undefined || store.endHour === undefined) ? (
             <ResultButton>
               <TextMustTime>시간을 설정해주세요</TextMustTime>
             </ResultButton>
@@ -91,31 +78,10 @@ function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, To
           )}
       </SetViewBox>
       {store.displayTimeModal && <SetTimeModal/>}
+      <HelpModal/>
     </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  fadingContainer: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    backgroundColor: 'powderblue',
-  },
-  fadingText: {
-    fontSize: 28,
-    textAlign: 'center',
-    margin: 10,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    marginVertical: 16,
-  },
-});
 
 const Container = styled.SafeAreaView`
   background: #e3e3e3;
@@ -126,12 +92,14 @@ const Container = styled.SafeAreaView`
 
 const SetViewBox = styled.View`
   background: #fff;
-  width: 90%;
-  height: 40%;
+  width: 370px;
+  height: 330px;
+  max-width: 90%;
+  max-height: 40%;
   border-radius: 10px;
-  justify-content: center;
   align-items: center;
-`;
+  padding-top: 70px;
+  `;
 
 const TimeButtonBox = styled.TouchableWithoutFeedback`
 `;
@@ -140,8 +108,8 @@ const ResultButtonBox = styled.TouchableWithoutFeedback`
 `;
 
 const TimeButton = styled.View`
-  margin:5px 0;
-  width: 90%;
+  margin: 5px 0;
+  width: 330px;
   height:40px;
   border-radius:10px;
   background: ${(props) => props.bgColor || "#fff"};
@@ -152,7 +120,7 @@ const TimeButton = styled.View`
 `;
 
 const ResultButton = styled.View`
-  margin: 40px 0 20px 0;
+  margin: 14px 0 20px 0;
   width: 90%;
   height:40px;
   border-radius:10px;

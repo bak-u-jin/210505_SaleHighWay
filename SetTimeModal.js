@@ -33,15 +33,6 @@ function SetTimeModal({navigation, store, setStartTime, setEndTime}){
   );
 }
 
-// const SetTimeBox = styled.View`
-//   width: 90%;
-//   height: 80%;
-//   position: absolute;
-//   background: #fff;
-//   border-radius: 10px;
-//   overflow: hidden;
-// `;
-
 function mapStateToProps(state){
   return {store: state};
 }

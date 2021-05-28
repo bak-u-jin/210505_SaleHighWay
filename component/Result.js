@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { setSaleResultPercent, setSaleTimePercent } from '../Store';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, EvilIcons } from '@expo/vector-icons';
 import { Easing } from 'react-native-reanimated';
 
 function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
@@ -78,7 +78,7 @@ function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
         toValue: 100,
         duration: 1000,
         easing: Easing.linear,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }
     ).start();
 
@@ -187,7 +187,6 @@ const GagePart = styled.View`
 `;
 
 const Gage = styled.View`
-  
 `;
 
 const GageFloat = styled.View`
@@ -205,7 +204,10 @@ const GageSectionBox = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-`;
+  shadowColor: #000;
+  shadowOffset: { width: 0, height: 10px };
+  shadowOpacity: 1;
+  `;
 
 const GageSection = styled.View`
   flex: ${(props) => props.flex || 2};
@@ -214,7 +216,7 @@ const GageSection = styled.View`
   border-radius: 10px;
   background: #ddd;
   align-items: center;
-`;
+  `;
 
 const SaleText = styled.Text`
   font-size: 22px;

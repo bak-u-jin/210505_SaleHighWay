@@ -5,6 +5,7 @@ let now = new Date();
 const store = createSlice({
   name: "storeReducer",
   initialState: {
+    helpBtnSize: false,
     startBtnSize: 1,
     endBtnSize: 1,
     resultBtnSize: 1,
@@ -17,10 +18,16 @@ const store = createSlice({
     startMinute: now.getMinutes(),
     saleTimePercent: 0,
     saleResultPercent: 0,
-    // endHour: now.getHours()+1,
-    // endMinute: now.getMinutes(),
+    endtimeWarningModal: false,
   },
   reducers: {
+    setHelpModal: (state, action)=>{
+      return{
+        ...state,
+        setHelpModal: action.payload,
+      }
+    },
+
     setStartBtn: (state, action)=>{
       return{
         ...state,
@@ -54,32 +61,41 @@ const store = createSlice({
     },
 
     setStartTime: (state, action) =>{
-      if(state.endHour === now.getHours()+1)
+      if( action.payload.hour === state.endHour && action.payload.minute === state.endMinute )
+        return{
+          ...state,
+          startHour: undefined,
+          startMinute: undefined,
+          displayTimeModal: false,
+          endtimeWarningModal: true,
+        }
+      else{
         return {
           ...state,
           startHour: action.payload.hour,
           startMinute: action.payload.minute,
-          endHour: action.payload.hour+1,
-          endMinute: action.payload.minute,
-          displayTimeModal: false,  
-        }
-      else
-        return {
-          ...state,
-          startHour: action.payload.hour,
-          startMinute: action.payload.minute,
-          displayTimeModal: false,  
-        }
+          displayTimeModal: false,
+          endtimeWarningModal: false,
+      }}
     },
 
     setEndTime: (state, action) =>{
-      console.log(action);
-      return {
-        ...state,
-        endHour: action.payload.hour,
-        endMinute: action.payload.minute,
-        displayTimeModal: false,
-      }
+      if( action.payload.hour === state.startHour && action.payload.minute === state.startMinute )
+        return{
+          ...state,
+          endHour: undefined,
+          endMinute: undefined,
+          displayTimeModal: false,
+          endtimeWarningModal: true,
+        }
+      else{
+        return {
+          ...state,
+          endHour: action.payload.hour,
+          endMinute: action.payload.minute,
+          displayTimeModal: false,
+          endtimeWarningModal: false,
+      }}
     },
 
     setSaleTimePercent: (state, action) =>{
@@ -94,11 +110,19 @@ const store = createSlice({
         ...state,
         saleResultPercent: action.payload
       }
+    },
+
+    closeEndTimeWarningModal: (state, action) => {
+      return{
+        ...state,
+        endtimeWarningModal: action.payload,
+      }
     }
   }
 });
 
 export const {
+  setHelpModal,
   setStartBtn,
   setEndBtn,
   setResultBtn,
@@ -106,5 +130,6 @@ export const {
   setStartTime,
   setEndTime,
   setSaleTimePercent,
-  setSaleResultPercent} = store.actions;
+  setSaleResultPercent,
+  closeEndTimeWarningModal} = store.actions;
 export default configureStore({reducer: store.reducer});

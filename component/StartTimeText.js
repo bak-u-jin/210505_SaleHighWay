@@ -5,26 +5,33 @@ import styled from 'styled-components';
 function StartTimeText({store}){
   return(
     <>
-      {(store.startHour<13)? (
-        store.startHour === 0 ? (
+      {store.startHour === undefined ? (
+        <>
+          <TimeTitle>출발시간을 </TimeTitle>
+          <TextStrong>정해주세요</TextStrong>
+        </>
+      ):(
+        (store.startHour<13)? (
+          store.startHour === 0 ? (
+            <>
+              <TimeTitle>출발시간</TimeTitle>
+              <DevineLine/>
+              <TextStrong>오전 {store.startHour+12}시 {store.startMinute}분</TextStrong>
+            </>
+            ):(
+              <>
+              <TimeTitle>출발시간</TimeTitle>
+              <DevineLine/>
+              <TextStrong>오전 {store.startHour}시 {store.startMinute}분</TextStrong>
+            </>
+          )
+        ) : (
           <>
             <TimeTitle>출발시간</TimeTitle>
             <DevineLine/>
-            <TextStrong>오전 {store.startHour+12}시 {store.startMinute}분</TextStrong>
-          </>
-          ):(
-            <>
-            <TimeTitle>출발시간</TimeTitle>
-            <DevineLine/>
-            <TextStrong>오전 {store.startHour}시 {store.startMinute}분</TextStrong>
+            <TextStrong>오후 {store.startHour-12}시 {store.startMinute}분</TextStrong>
           </>
         )
-      ) : (
-        <>
-          <TimeTitle>출발시간</TimeTitle>
-          <DevineLine/>
-          <TextStrong>출발시간 오후 {store.startHour-12}시 {store.startMinute}분</TextStrong>
-        </>
       )}
     </>
   )
