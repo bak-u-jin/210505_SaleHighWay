@@ -1,0 +1,19 @@
+.container{
+  margin: 10%;
+  width: 1440px;
+  height: 3040px;
+  border-radius: 2%;
+  background: #22195E;
+  overflow: hidden;
+}
+
+.background{
+  width: 100%;
+  height: 40%;
+}
+
+.content{
+  width: 100%;
+  height: 60%;
+  background: #0F143A;
+}
