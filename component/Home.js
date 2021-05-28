@@ -1,6 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useRef } from 'react';
-import { Animated } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { StatusBar } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { setStartBtn, setEndBtn, setResultBtn, toggleTimeModal} from '../Store';
@@ -13,7 +12,7 @@ import EndTimeWarningModal from './EndTimeWarningModal';
 import { Easing } from 'react-native-reanimated';
 
 function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, ToggleTimeModal}) {
-  const statusBarColor = "#e3e3e3";
+  const statusBarColor = "#22195E";
 
   const timeBtnColor = "#71c9ce";
   const timeBtnPressColor = "#a6e3e9";
@@ -47,11 +46,12 @@ function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, To
     ResultBtnPress(1, resultBtnBgColor);
   }
 
-  const resultAnim = useRef(new Animated.Value(0)).current;
+  const [styleStatusBar, setStyleStatusBar] = useState('light-content');
+
 
   return (
     <Container>
-      <StatusBar backgroundColor= {statusBarColor}/>
+      <StatusBar backgroundColor= {statusBarColor} barStyle={styleStatusBar}/>
       <SetViewBox>
         <HelpButton/>
         <TimeButtonBox onPressIn= {StartTimeOnPressIn} onPressOut= {StartTimeOnPressOut}>
