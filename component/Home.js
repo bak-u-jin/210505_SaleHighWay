@@ -9,7 +9,6 @@ import StartTimeText from './StartTimeText';
 import EndTimeText from './EndTimeText';
 import HelpModal from './HelpModal';
 import EndTimeWarningModal from './EndTimeWarningModal';
-import { Easing } from 'react-native-reanimated';
 
 function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, ToggleTimeModal}) {
   const statusBarColor = "#22195E";
