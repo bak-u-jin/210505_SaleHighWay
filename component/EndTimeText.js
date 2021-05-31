@@ -2,6 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { connect } from "react-redux";
 
+import PutZero from './PutZero';
+
 function StartTimeText({store}){
   return(
     <>
@@ -20,7 +22,7 @@ function StartTimeText({store}){
               <Text style={[styles.commonFontStyle,styles.title]}>도착시간</Text>
               <View>
                 <Text style={[styles.commonFontStyle,styles.ampm]}>오전</Text>
-                <Text style={[styles.commonFontStyle,styles.time]}>{store.endHour+12}:{store.endMinute}</Text>
+                <Text style={[styles.commonFontStyle,styles.time]}>{store.endHour+12}:{PutZero(store.endMinute)}</Text>
               </View>
             </View>
           ):(
@@ -28,7 +30,7 @@ function StartTimeText({store}){
               <Text style={[styles.commonFontStyle,styles.title]}>도착시간</Text>
               <View>
                 <Text style={[styles.commonFontStyle,styles.ampm]}>오전</Text>
-                <Text style={[styles.commonFontStyle,styles.time]}>{store.endHour}:{store.endMinute}</Text>
+                <Text style={[styles.commonFontStyle,styles.time]}>{PutZero(store.endHour)}:{PutZero(store.endMinute)}</Text>
               </View>
             </View>
           )
@@ -37,7 +39,7 @@ function StartTimeText({store}){
             <Text style={[styles.commonFontStyle,styles.title]}>도착시간</Text>
             <View>
               <Text style={[styles.commonFontStyle,styles.ampm]}>오후</Text>
-              <Text style={[styles.commonFontStyle,styles.time]}>{store.endHour}:{store.endMinute}</Text>
+              <Text style={[styles.commonFontStyle,styles.time]}>{PutZero(store.endHour-12)}:{PutZero(store.endMinute)}</Text>
             </View>
           </View>
       ))}
