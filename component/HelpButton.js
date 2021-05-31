@@ -13,7 +13,7 @@ function HelpButton({store, HelpButtonPress}){
   return(
     <>
     <HelpIconBox onPressIn= {HelpOnPressIn}>
-      <EvilIcons name="question" size={24} color="#666" style={styles.questionIcon}/>
+      <EvilIcons name="question" size={40} color="#fff" style={styles.questionIcon}/>
     </HelpIconBox>
     
     </>
@@ -23,8 +23,8 @@ function HelpButton({store, HelpButtonPress}){
 const styles = StyleSheet.create({
   questionIcon: {
     position: 'absolute',
-    top:10,
-    right: 10
+    top: 20,
+    right: 20
   }
 });
 

@@ -1,55 +1,85 @@
 import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { connect } from "react-redux";
-import styled from 'styled-components';
 
 function StartTimeText({store}){
   return(
     <>
       {store.startHour === undefined ? (
         <>
-          <TimeTitle>출발시간을 </TimeTitle>
-          <TextStrong>정해주세요</TextStrong>
+          <View style={styles.textBox}>
+            <Text style={[styles.commonFontStyle,styles.title]}>출발시간</Text>
+            <View>
+            <Text style={[styles.commonFontStyle,styles.ampm]}>을</Text>
+            <Text style={[styles.commonFontStyle,styles.textSet]}>정해주세요</Text>
+            </View>
+          </View>
         </>
       ):(
         (store.startHour<13)? (
           store.startHour === 0 ? (
             <>
-              <TimeTitle>출발시간</TimeTitle>
-              <DevineLine/>
-              <TextStrong>오전 {store.startHour+12}시 {store.startMinute}분</TextStrong>
+              <View style={styles.textBox}>
+                <Text style={[styles.commonFontStyle,styles.title]}>출발시간</Text>
+                <View>
+                  <Text style={[styles.commonFontStyle,styles.ampm]}>오전</Text>
+                  <Text style={[styles.commonFontStyle,styles.time]}>{store.startHour+12}:{store.startMinute}</Text>
+                </View>
+              </View>
             </>
             ):(
-              <>
-              <TimeTitle>출발시간</TimeTitle>
-              <DevineLine/>
-              <TextStrong>오전 {store.startHour}시 {store.startMinute}분</TextStrong>
+            <>
+              <View style={styles.textBox}>
+                <Text style={[styles.commonFontStyle,styles.title]}>출발시간</Text>
+                <View>
+                  <Text style={[styles.commonFontStyle,styles.ampm]}>오전</Text>
+                  <Text style={[styles.commonFontStyle,styles.time]}>{store.startHour}:{store.startMinute}</Text>
+                </View>
+              </View>
             </>
           )
         ) : (
-          <>
-            <TimeTitle>출발시간</TimeTitle>
-            <DevineLine/>
-            <TextStrong>오후 {store.startHour-12}시 {store.startMinute}분</TextStrong>
-          </>
+          <View style={styles.textBox}>
+            <Text style={[styles.commonFontStyle,styles.title]}>출발시간</Text>
+            <View>
+              <Text style={[styles.commonFontStyle,styles.ampm]}>오후</Text>
+              <Text style={[styles.commonFontStyle,styles.time]}>{store.startHour}:{store.startMinute}</Text>
+            </View>
+          </View>
         )
       )}
     </>
   )
 }
 
-const TimeTitle = styled.Text`
-`;
+const styles = StyleSheet.create({
+  textBox:{
+    height:'100%',
+    justifyContent: 'space-between',
+  },
+  
+  commonFontStyle:{
+    color: '#dbd9e8',
+    fontWeight: 'bold',
+  },
 
-const DevineLine = styled.View`
-  height: 26px;
-  width: 1.4px;
-  background: #fff;
-  margin: 0 10px;
-`;
+  title:{
+    fontSize: 24,
+  },
 
-const TextStrong = styled.Text`
-  font-weight: bold;
-`;
+  textSet:{
+    fontSize: 30
+  },
+
+  ampm:{
+    fontSize: 24,
+  },
+  
+  time:{
+    fontSize: 50,
+    lineHeight: 50,
+  }
+})
 
 function mapStateToProps(state){
   return {store: state};

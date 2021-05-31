@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { Animated, StyleSheet, Text, View } from 'react-native';
+import { Animated, StyleSheet, SafeAreaView, Text, View, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import { setSaleResultPercent, setSaleTimePercent } from '../Store';
-import { FontAwesome5, EvilIcons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { Easing } from 'react-native-reanimated';
+
+import TruckBg from './design/svgTruckBg';
 
 function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
   let startTime = store.startHour * 60 + store.startMinute;
@@ -83,146 +86,169 @@ function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
     ).start();
 
   return(
-    <Container>
-      <ResultViewBox>
-        <BackArrowBox onPressIn={OnPressIn}>
-          <FontAwesome5 name="angle-double-left" size={20} color="black" style={styles.arrow}/>
-        </BackArrowBox>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.bgView}>
+        <LinearGradient style={styles.bgLinearGradient} colors={['#22195E', '#382F78']}/>
+        <TruckBg/>
+      </View>
 
-        <ResultText>{store.saleResultPercent}% 세일</ResultText>
-        <GageBar>
-          <GagePartBox>
-            <GagePart bgColor="#be0000" flex={2}></GagePart>
-            <GagePart bgColor="#f7ea00" flex={5}></GagePart>
-            <GagePart bgColor="#9ede73" flex={3}></GagePart>
-          </GagePartBox>
-          <Animated.View style={[styles.gage, {width: resultAnim.interpolate({
-            inputRange: [0,100],
-            outputRange: [`0%`, `${store.saleTimePercent}%`],
-          })}]}/>
-            <GageFloat/>
-        </GageBar>
-        <GageSectionBox>
-          <GageSection flex={2}>
-            <Text>0%~19%</Text>
-            <SaleText>0%</SaleText>
-          </GageSection>
-          <GageSection flex={5}>
-            <Text>20%~69%</Text>
-            <SaleText>30%</SaleText>
-          </GageSection>
-          <GageSection flex={3}>
-            <Text>70%~100%</Text>
-            <SaleText>50%</SaleText>
-          </GageSection>
-        </GageSectionBox>
-      </ResultViewBox>
-    </Container>
+      <View style={styles.contentBox}>
+        <View style={styles.backIconBox}>
+          <TouchableWithoutFeedback onPressIn={OnPressIn}>
+            <FontAwesome5 name="angle-double-left" size={24} color="#fff" style={styles.arrow}/>
+          </TouchableWithoutFeedback>
+        </View>
+
+        <ScrollView style={styles.scrollArea}>
+          <View style={styles.resultArea}>
+            <Text style={styles.resultText}>{store.saleResultPercent}% 세일</Text>
+            <View style={styles.gageBar}>
+              <View style={styles.gagePartBox}>
+                <View style={[styles.gagePart, {backgroundColor:'#be0000'}]} flex={2}></View>
+                <View style={[styles.gagePart, {backgroundColor:'#f7ea00'}]} flex={5}></View>
+                <View style={[styles.gagePart, {backgroundColor:'#9ede73'}]} flex={3}></View>
+                </View>
+              <Animated.View style={[styles.gage, {
+                width: resultAnim.interpolate({
+                inputRange: [0,100],
+                outputRange: [`0%`, `${store.saleTimePercent}%`]
+                })
+              }]}/>
+              <View style={styles.gageFloat}/>
+            </View>
+
+            <View style={styles.gageSectionBox}>
+              <View style={styles.gageSection} flex={2}>
+                <Text style={styles.gageSectionText}>0%~19%</Text>
+                <Text style={[styles.gageSectionText, styles.saleText]}>0%</Text>
+              </View>
+              <View style={styles.gageSection} flex={5}>
+                <Text style={styles.gageSectionText}>20%~69%</Text>
+                <Text style={[styles.gageSectionText, styles.saleText]}>30%</Text>
+              </View>
+              <View style={styles.gageSection} flex={3}>
+                <Text style={styles.gageSectionText}>70%~100%</Text>
+                <Text style={[styles.gageSectionText, styles.saleText]}>50%</Text>
+              </View>
+            </View>
+          </View>
+          <View style={[styles.resultArea, {height:400}]}></View>
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  arrow: {
-    position: 'absolute',
-    left: 20,
-    top: 20
+  container: {
+    backgroundColor: "#22195E",
+    flex: 1
   },
+  
+  bgView: {
+    flex: 2,
+  },
+  
+  bgLinearGradient:{
+    ...StyleSheet.absoluteFillObject
+  },
+  
+  contentBox:{
+    flex: 3,
+    backgroundColor: "#0f143a",
+    alignItems: 'center',
+    padding: '5%'
+  },
+  
+  backIconBox:{
+    width: '100%',
+  },
+
+  scrollArea:{
+    width: '100%'
+  },
+
+  resultArea:{
+    width: '100%',
+    padding: '5%',
+    marginTop: 24,
+    backgroundColor: '#4D428D',
+    borderRadius: 10,
+  },
+
+  resultText:{
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+
+  gageBar:{
+    width: '100%',
+    height: 10,
+    borderRadius: 10,
+    flexDirection: 'row',
+    overflow: 'hidden',
+  },
+
+  gagePartBox:{
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    flexDirection: 'row'
+  },
+  
+  gagePart:{
+    height: '100%'
+  },
+
   gage: {
     height: '100%',
     backgroundColor: '#3490de',
     alignItems: 'flex-end',
+  },
+
+  gageFloat: {
+    width: 10,
+    height: 10,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    marginLeft: -5
+  },
+
+  gageSectionBox:{
+    width: '100%',
+    height: 64,
+    flexDirection: 'row',
+    marginTop: 14
+  },
+
+  gageSection:{
+    justifyContent:'center',
+    alignItems: 'center',
+    backgroundColor: '#7667CA',
+    borderRadius: 10,
+    marginHorizontal: 2,
+  },
+  
+  gageSectionText:{
+    color: '#fff',
+    fontWeight: 'bold'
+  },
+
+  saleText:{
+    fontSize: 22
   }
 })
 
-const Container = styled.SafeAreaView`
-  background: #e3e3e3;
-  flex:1;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ResultViewBox = styled.View`
-  padding: 5%;
-  background: #fff;
-  width: 90%;
-  height: 40%;
-  border-radius: 10px;
-  justify-content: center;
-  align-items: center;
-`;
-
-const BackArrowBox = styled.TouchableWithoutFeedback`
-`;
-
-const ResultText = styled.Text`
-  font-size: 30px;
-  font-weight: bold;
-  margin-bottom: 20px;
-`;
-
-const GageBar = styled.View`
-  width: 100%;
-  height: 10px;
-  background: #eee;
-  border: 1px rgba(50, 50, 93, 0.25) solid;
-  borderBottomWidth: 0px;
-  borderRightWidth: 0px;
-  border-radius: 10px;
-  flex-direction: row;
-  overflow: hidden;
-`;
-
-const GagePartBox = styled.View`
-  width: 100%;
-  height: 100%;
-  flex-direction: row;
-  position: absolute;
-`;
-
-const GagePart = styled.View`
-  flex: ${(props) => props.flex || 2};
-  height: 100%;
-  background: ${(props) => props.bgColor || "#eee"};
-  align-items: flex-end;
-`;
-
-const Gage = styled.View`
-`;
-
-const GageFloat = styled.View`
-  width: 10px;
-  height: 10px;
-  background: #fff;
-  border-radius: 5px;
-  margin-left: -5px;
-`;
-
-const GageSectionBox = styled.View`
-  width:100%;
-  height:20%;
-  margin: 10px 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  shadowColor: #000;
-  shadowOffset: { width: 0, height: 10px };
-  shadowOpacity: 1;
-  `;
-
 const GageSection = styled.View`
-  flex: ${(props) => props.flex || 2};
   height: 100%;
   margin: 0 2px;
   border-radius: 10px;
   background: #ddd;
   align-items: center;
   `;
-
-const SaleText = styled.Text`
-  font-size: 22px;
-  font-weight: bold;
-`;
-
 
 function mapStateToProps(state){
   return {store: state};
