@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { connect } from 'react-redux';
 import {closeEndTimeWarningModal} from '../Store';
 
@@ -11,34 +11,43 @@ function EndTimeWarningModal({store, CloseEndTimeWarningModal}){
   return(
     <>
       {store.endtimeWarningModal ? (
-        <WarningTextBox>
-          <WarningStrongText>출발시간과 도착시간을 다르게 해주세요</WarningStrongText>
-        </WarningTextBox>
+        <View style={styles.warningBox}>
+          <Text style={styles.warningStrongText}>출발시간</Text>
+          <Text style={styles.WarningText}>과 </Text>
+          <Text style={styles.warningStrongText}>도착시간</Text>
+          <Text style={styles.WarningText}>을 </Text>
+          <Text style={styles.warningStrongText}>다르게</Text>
+          <Text style={styles.WarningText}> 해주세요</Text>
+        </View>
       ): (
-        <WarningTextBox/>
+        <View style={styles.warningBox}/>
       )}
     </>
   )
 }
 
-const WarningTextBox = styled.View`
-  width: 100%;
-  height: 30px;
-  flex-direction: row;
-  background: #fff;
-  border-radius: 10px;
-  justify-content: center;
-  align-items: center;
-`;
+const styles = StyleSheet.create({
+  warningBox:{
+    width:'100%',
+    height:40,
+    marginTop: 10,
+    borderRadius: 10,
+    flexDirection:'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 
-const WarningText = styled.Text`
-  color: #333;
-`;
-
-const WarningStrongText = styled.Text`
-  color: #f00;
-  font-weight: bold;
-`;
+  WarningText:{
+    color: '#eee',
+    fontSize: 18
+  },
+  
+  warningStrongText:{
+    color: '#dF3B70',
+    fontWeight: 'bold',
+    fontSize: 24
+  }
+});
 
 function mapStateToProps(state){
   return {store: state};

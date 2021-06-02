@@ -35,7 +35,6 @@ export default function App() {
   return (
     <Provider store={store}>
       {/* <HelpModal/> */}
-      {/* 여기다 배경넣을지 고민중 */}
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="Home" component={Home}/>

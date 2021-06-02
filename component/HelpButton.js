@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
-import styled from 'styled-components';
+import { StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import {setHelpModal} from '../Store';
@@ -12,9 +11,9 @@ function HelpButton({store, HelpButtonPress}){
 
   return(
     <>
-    <HelpIconBox onPressIn= {HelpOnPressIn}>
+    <TouchableWithoutFeedback onPressIn= {HelpOnPressIn}>
       <EvilIcons name="question" size={40} color="#fff" style={styles.questionIcon}/>
-    </HelpIconBox>
+    </TouchableWithoutFeedback>
     
     </>
   )
@@ -27,9 +26,6 @@ const styles = StyleSheet.create({
     right: 20
   }
 });
-
-const HelpIconBox = styled.TouchableWithoutFeedback`
-`;
 
 function mapStateToProps(state){
   return {store: state};

@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "210505_highway",
-    "slug": "210505_highway",
-    "version": "1.0.0",
+    "name": "고속도로 할인 계산기",
+    "slug": "saleHighway",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -22,10 +22,16 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/foregroundIcon.png",
+        "backgroundImage": "./assets/backgroundIcon.png",
+        "backgroundColor": "#312870"
       },
-      "package": "com.saleHighway.project"
+      "config": {
+        "googleMobileAdsAppId":"ca-app-pub-1420794940419594~3860269400"
+      },
+      "package": "com.saleHighway.project",
+      "permissions": [],
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 import { Animated, StyleSheet, SafeAreaView, Text, View, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
@@ -101,7 +100,7 @@ function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
 
         <ScrollView style={styles.scrollArea}>
           <View style={styles.resultArea}>
-            <Text style={styles.resultText}>{store.saleResultPercent}% 세일</Text>
+            <Text style={styles.resultText}>{store.saleResultPercent}% 할인</Text>
             <View style={styles.gageBar}>
               <View style={styles.gagePartBox}>
                 <View style={[styles.gagePart, {backgroundColor:'#be0000'}]} flex={2}></View>
@@ -241,14 +240,6 @@ const styles = StyleSheet.create({
     fontSize: 22
   }
 })
-
-const GageSection = styled.View`
-  height: 100%;
-  margin: 0 2px;
-  border-radius: 10px;
-  background: #ddd;
-  align-items: center;
-  `;
 
 function mapStateToProps(state){
   return {store: state};

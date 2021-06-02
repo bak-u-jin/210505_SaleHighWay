@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar, View, StyleSheet, SafeAreaView, Dimensions, TouchableWithoutFeedback, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { setStartBtn, setEndBtn, setResultBtn, toggleTimeModal} from '../Store';
 import { LinearGradient } from 'expo-linear-gradient';
+import {
+  AdMobBanner,
+  setTestDeviceIDAsync,
+} from 'expo-ads-admob';
 
 import HelpButton from './HelpButton.js';
 import SetTimeModal from '../SetTimeModal';
@@ -16,7 +20,13 @@ const windowWidth = Dimensions.get('window').width;
 const cantResultButtonBg = "#3A396E";
 
 function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, ToggleTimeModal}) {
-  
+
+  useEffect(() =>{
+    setTestDeviceIDAsync("EMULATOR");
+  },[]);
+
+  const BANNER_ID = `ca-app-pub-1420794940419594/5953107948`;
+
   const statusBarColor = "#22195E";
 
   const timeBtnColor = "#4D428D";
@@ -58,7 +68,7 @@ function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, To
         <View style={styles.bgView}>
           <LinearGradient style={styles.bgLinearGradient} colors={['#22195E', '#382F78']}/>
           <TruckBg/>
-          <HelpButton/>
+          {/* <HelpButton/> */}
         </View>
 
       <View style={styles.contentBox}>
@@ -87,7 +97,7 @@ function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, To
             </View>
           </TouchableWithoutFeedback>
         </View>
-        {/* <EndTimeWarningModal/> */}
+        <EndTimeWarningModal/>
           {(store.startHour === undefined || store.endHour === undefined) ? (
             <View style={styles.resultButton}>
               <Text style={styles.cantResultText}>시간을 설정해주세요</Text>
@@ -102,6 +112,15 @@ function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, To
               </View>
             </TouchableWithoutFeedback>
           )}
+
+        <View style={styles.adBox}>
+          
+          <AdMobBanner
+            bannerSize="fullBanner"
+            adUnitID={BANNER_ID}
+            servePersonalizedAds // true or false
+            onDidFailToReceiveAdWithError={(e) => console.log(e)}/>
+        </View>
       </View>
       {store.displayTimeModal && <SetTimeModal/>}
       <HelpModal/>
@@ -155,7 +174,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 70,
     borderRadius: 10,
-    marginTop:40,
+    marginTop: 10,
     backgroundColor: cantResultButtonBg,
     justifyContent: 'center',
     alignItems: 'center',
@@ -171,6 +190,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 32
+  },
+
+  adBox:{
+    width: '100%',
+    height: '100%',
+    marginTop: 20,
+    justifyContent:"flex-end"
   }
 })
 
