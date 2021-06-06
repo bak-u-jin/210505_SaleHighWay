@@ -33,9 +33,6 @@
       "permissions": [],
       "versionCode": 1
     },
-
-    "_comment": "!!!!! Realversion is 1.0.1 !!!!!",
-
     "web": {
       "favicon": "./assets/favicon.png"
     }
