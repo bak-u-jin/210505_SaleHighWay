@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, StyleSheet, SafeAreaView, Text, View, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { Animated, StyleSheet, SafeAreaView, Text, View, TouchableWithoutFeedback, ScrollView, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import { setSaleResultPercent, setSaleTimePercent } from '../Store';
@@ -7,6 +7,10 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Easing } from 'react-native-reanimated';
 
 import TruckBg from './design/svgTruckBg';
+import StartTimeText from './StartTimeText';
+import EndTimeText from './EndTimeText';
+
+const windowWidth = Dimensions.get('window').width;
 
 function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
   let startTime = store.startHour * 60 + store.startMinute;
@@ -28,11 +32,9 @@ function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
         endTime = 360;
       else if(endTime > 1800 && endTime < 2700)
         endTime = 1800;
-      console.log("calc",startTime, endTime, fullTime);
       ClacSaleTime();
     }
     CalcSaleTimePercent();
-    console.log("sale",saleTimePercent,"% ", fullTime, saleTime);
     SetSaleResult();
   }
 
@@ -131,7 +133,20 @@ function Result({navigation, store, SetSaleTimePercent, SetSaleResultPercent}){
               </View>
             </View>
           </View>
-          <View style={[styles.resultArea, {height:400}]}></View>
+          <View style={styles.timeButtonArea}>
+            <View style={[styles.timeButton]}>
+              <View style={[styles.buttonBgCircle, {backgroundColor: 'rgba(120,110,200,0.2)', right: -windowWidth*0.08, top: 0}]}></View>
+              <View style={[styles.buttonBgCircle, {backgroundColor: 'rgba(119,102,217,0.2)', right: 0, top: -windowWidth*0.08}]}></View>
+              <View style={[styles.buttonBgCircle, {backgroundColor: 'rgba(144,130,202,0.36)', right: -windowWidth*0.1, top: -windowWidth*0.1}]}></View>
+              <StartTimeText/>
+            </View>
+            <View style={[styles.timeButton]}>
+              <View style={[styles.buttonBgCircle, {backgroundColor: 'rgba(120,110,200,0.2)', right: -windowWidth*0.08, top: 0}]}></View>
+              <View style={[styles.buttonBgCircle, {backgroundColor: 'rgba(119,102,217,0.2)', right: 0, top: -windowWidth*0.08}]}></View>
+              <View style={[styles.buttonBgCircle, {backgroundColor: 'rgba(144,130,202,0.36)', right: -windowWidth*0.1, top: -windowWidth*0.1}]}></View>
+              <EndTimeText/>
+            </View>
+          </View>
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -238,7 +253,30 @@ const styles = StyleSheet.create({
 
   saleText:{
     fontSize: 22
-  }
+  },
+
+  timeButtonArea:{
+    width: '100%',
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+
+  timeButton:{
+    overflow: 'hidden',
+    width: windowWidth*0.42,
+    height: windowWidth*0.42,
+    backgroundColor: '#3A396E',
+    borderRadius: windowWidth*0.04,
+    padding: '4%',
+  },
+
+  buttonBgCircle: {
+    width: windowWidth*0.32,
+    height: windowWidth*0.32,
+    borderRadius: windowWidth*0.16, 
+    position: 'absolute',
+  },
 })
 
 function mapStateToProps(state){

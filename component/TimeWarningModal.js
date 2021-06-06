@@ -1,12 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { connect } from 'react-redux';
-import {closeEndTimeWarningModal} from '../Store';
 
-function EndTimeWarningModal({store, CloseEndTimeWarningModal}){
-  function CloseWarningModal(){
-    CloseEndTimeWarningModal();
-  }
+function EndTimeWarningModal({ store }){
 
   return(
     <>
@@ -53,10 +49,4 @@ function mapStateToProps(state){
   return {store: state};
 }
 
-function mapDispatchToProps(dispatch){
-  return{
-    CloseEndTimeWarningModal: () => dispatch(closeEndTimeWarningModal()),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps) (EndTimeWarningModal);
+export default connect(mapStateToProps, null) (EndTimeWarningModal);

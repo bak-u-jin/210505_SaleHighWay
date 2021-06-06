@@ -11,7 +11,6 @@ import Home from './component/Home';
 import SetTimeModal from './SetTimeModal';
 import Result from './component/Result';
 import { Text } from 'react-native';
-import HelpModal from './component/HelpModal';
 
 const Stack = createStackNavigator();
 Text.defaultProps = Text.defaultProps || {};
@@ -34,7 +33,6 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      {/* <HelpModal/> */}
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="Home" component={Home}/>

@@ -8,12 +8,10 @@ import {
   setTestDeviceIDAsync,
 } from 'expo-ads-admob';
 
-import HelpButton from './HelpButton.js';
 import SetTimeModal from '../SetTimeModal';
 import StartTimeText from './StartTimeText';
 import EndTimeText from './EndTimeText';
-import HelpModal from './HelpModal';
-import EndTimeWarningModal from './EndTimeWarningModal';
+import TimeWarningModal from './TimeWarningModal';
 import TruckBg from './design/svgTruckBg';
 
 const windowWidth = Dimensions.get('window').width;
@@ -97,7 +95,7 @@ function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, To
             </View>
           </TouchableWithoutFeedback>
         </View>
-        <EndTimeWarningModal/>
+        <TimeWarningModal/>
           {(store.startHour === undefined || store.endHour === undefined) ? (
             <View style={styles.resultButton}>
               <Text style={styles.cantResultText}>시간을 설정해주세요</Text>
@@ -112,18 +110,15 @@ function Home({navigation, store, StartBtnPress, EndBtnPress, ResultBtnPress, To
               </View>
             </TouchableWithoutFeedback>
           )}
-
-        <View style={styles.adBox}>
-          
           <AdMobBanner
+            style={styles.adMob}
             bannerSize="fullBanner"
             adUnitID={BANNER_ID}
-            servePersonalizedAds // true or false
-            onDidFailToReceiveAdWithError={(e) => console.log(e)}/>
-        </View>
+            servePersonalizedAds={true} // true or false
+            testID="30811c64-3f4d-497c-b835-b838db4dc853"
+            onDidFailToReceiveAdWithError={(e) => console.error(e)}/>
       </View>
       {store.displayTimeModal && <SetTimeModal/>}
-      <HelpModal/>
     </SafeAreaView>
   );
 }
@@ -193,11 +188,18 @@ const styles = StyleSheet.create({
   },
 
   adBox:{
+    backgroundColor:'yellow',
     width: '100%',
     height: '100%',
     marginTop: 20,
-    justifyContent:"flex-end"
+    alignItems:'center',
+  },
+
+  adMob:{
+    position:'absolute',
+    bottom:0
   }
+
 })
 
 function mapStateToProps(state){

@@ -6,7 +6,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 function SetTimeModal({navigation, store, setStartTime, setEndTime}){
   const date =new Date();
-  console.log("aa");
   useEffect(()=>{
   },[]);
 
@@ -16,8 +15,6 @@ function SetTimeModal({navigation, store, setStartTime, setEndTime}){
       setStartTime(currentDate.getHours(), currentDate.getMinutes());
     else
       setEndTime(currentDate.getHours(), currentDate.getMinutes());
-
-    console.log("aaaaa");
 
   };
 
